@@ -7,8 +7,17 @@ public class MovieCardDTO {
     private String subTitle;
     private Integer year;
     private String imgUrl;
+    
+    public MovieCardDTO(Long id, String title, String subTitle, Integer year, String imgUrl) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.subTitle = subTitle;
+		this.year = year;
+		this.imgUrl = imgUrl;
+	}
 
-    public Long getId() {
+	public Long getId() {
         return id;
     }
 
