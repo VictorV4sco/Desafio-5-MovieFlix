@@ -1,5 +1,8 @@
 package com.devsuperior.movieflix.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,8 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devsuperior.movieflix.dto.GenreDTO;
 import com.devsuperior.movieflix.dto.MovieCardDTO;
 import com.devsuperior.movieflix.dto.MovieDetailsDTO;
+import com.devsuperior.movieflix.dto.ReviewDTO;
 import com.devsuperior.movieflix.entities.Movie;
+import com.devsuperior.movieflix.entities.Review;
 import com.devsuperior.movieflix.repositories.MovieRepository;
+import com.devsuperior.movieflix.repositories.ReviewRepository;
 import com.devsuperior.movieflix.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -20,6 +26,9 @@ public class MovieService {
 
 	@Autowired
 	private MovieRepository repository;
+
+	@Autowired
+	private ReviewRepository reviewRepository;
 	
 	@Transactional(readOnly = true)
 	public Page<MovieCardDTO> findMoviesByGenre(Pageable pageable, Long id) {
@@ -45,4 +54,18 @@ public class MovieService {
 //    public MovieDetailsDTO findMovieById(Long id) {
 //        return repository.findMovieDetailsById(id);
 //    }
+	
+	@Transactional
+	public List<ReviewDTO> findByMovieId(Long movieId) {
+        List<Review> reviews = reviewRepository.findByMovieId(movieId);
+        return reviews.stream().map(review -> new ReviewDTO(
+            review.getId(),
+            review.getText(),
+            review.getMovie().getId(),
+            review.getUser().getId(),
+            review.getUser().getName(),
+            review.getUser().getEmail()
+        )).collect(Collectors.toList());
+    }
+	
 }

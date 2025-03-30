@@ -26,4 +26,5 @@ public class ReviewController {
 	public ResponseEntity<ReviewDTO> insert(@Valid @RequestBody ReviewDTO dto) {
 		return new ResponseEntity<>(service.insert(dto), HttpStatus.CREATED);
 	}
+	
 }
